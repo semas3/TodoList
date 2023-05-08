@@ -24,6 +24,19 @@
         android:visibility="invisible" />
 
     <Button
+        android:id="@+id/detailsButton"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:text="info"
+        app:iconGravity="textStart"
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:layout_editor_absoluteX="262dp"
+        tools:layout_editor_absoluteY="136dp" />
+
+    <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
