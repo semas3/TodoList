@@ -6,7 +6,7 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.lab4.MainFragment"
+        android:name="com.example.lab4.screens.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
-        android:name="com.example.lab4.AddItemFragment"
+        android:name="com.example.lab4.screens.AddItemFragment"
         android:label="fragment_add_item"
         tools:layout="@layout/fragment_add_item" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemDetailsFragment"
-        android:name="com.example.lab4.ItemDetailsFragment"
+        android:name="com.example.lab4.screens.ItemDetailsFragment"
         android:label="fragment_item_details"
         tools:layout="@layout/fragment_item_details" >
         <action

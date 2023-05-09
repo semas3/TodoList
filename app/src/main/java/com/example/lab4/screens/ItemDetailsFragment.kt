@@ -1,10 +1,12 @@
-package com.example.lab4
+package com.example.lab4.screens
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.lab4.MAIN
+import com.example.lab4.R
 import com.example.lab4.databinding.FragmentItemDetailsBinding
 
 class ItemDetailsFragment : Fragment() {
@@ -20,7 +22,7 @@ class ItemDetailsFragment : Fragment() {
         binding.backButton.setOnClickListener {
             MAIN.navController.navigate(R.id.action_itemDetailsFragment_to_mainFragment)
         }
-        val item = MAIN.taskAdapter.taskList.find { it.number.toString() == MAIN.taskAdapter.lastDetailsNumber }
+        val item = MAIN.taskAdapter.taskList.find { it.id.toString() == MAIN.taskAdapter.lastDetailsNumber }
         binding.taskTitle.text = item?.text
         binding.taskDetails.text = item?.details
     }

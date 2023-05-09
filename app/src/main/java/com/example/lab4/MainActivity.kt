@@ -11,7 +11,7 @@ import com.example.lab4.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    var taskList = arrayListOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10",  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20")
+    var taskList = arrayListOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
     private lateinit var recyclerView: RecyclerView
     lateinit var taskAdapter: TaskAdapter
 
@@ -31,10 +31,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = taskAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        taskAdapter.supportActionBar?.title = "To do list        Total: ${taskAdapter.taskList.size} - Checked: 0"
+        taskAdapter.updateActionBar()
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        //setupActionBarWithNavController(nav)
     }
 
 }

@@ -1,13 +1,13 @@
-package com.example.lab4
+package com.example.lab4.screens
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lab4.databinding.ActivityMainBinding
+import com.example.lab4.MAIN
+import com.example.lab4.R
 import com.example.lab4.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {

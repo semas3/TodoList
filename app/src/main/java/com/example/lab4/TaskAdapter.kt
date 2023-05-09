@@ -10,19 +10,38 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Room
 import com.example.lab4.TaskAdapter.TaskViewHolder
+import com.example.lab4.database.AppDatabase
 
-class TaskInfo(val text: String, val details: String, var isChecked: Boolean, val number: Int) {
+@Entity
+class TaskInfo(val text: String,
+               val details: String,
+               var isChecked: Boolean,
+               @PrimaryKey val id: Int) {
     companion object {
         var count = 0
     }
 }
 
-class TaskAdapter(context: Context, taskList: ArrayList<String>, val supportActionBar: ActionBar?)
+class TaskAdapter(context: Context, taskTitleList: ArrayList<String>, val supportActionBar: ActionBar?)
                                                         : RecyclerView.Adapter<TaskViewHolder>() {
-    val taskList: MutableList<TaskInfo> = taskList
-        .map { TaskInfo(it, it, false, TaskInfo.count++) }.toMutableList()
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    lateinit var taskList: MutableList<TaskInfo>
+    val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    val db = Room.databaseBuilder(MAIN, AppDatabase::class.java, "db").allowMainThreadQueries().build()
+    val taskInfoDao = db.taskInfoDao()
+
+    init {
+        updateTaskListFromDB()
+        if (taskList.isEmpty()) {
+            taskInfoDao.insertAll(*taskTitleList.map { TaskInfo(it, it, false, TaskInfo.count++) }.toTypedArray())
+        }
+        else TaskInfo.count = taskList.maxOf { it.id } + 1
+        updateTaskListFromDB()
+    }
 
     var lastDetailsNumber = ""
 
@@ -35,7 +54,7 @@ class TaskAdapter(context: Context, taskList: ArrayList<String>, val supportActi
         holder.apply {
             taskCheckBox.text = taskList[position].text
             taskCheckBox.isChecked = taskList[position].isChecked
-            number.text = taskList[position].number.toString()
+            number.text = taskList[position].id.toString()
             taskCheckBox.paintFlags = if (taskList[position].isChecked)
                 taskCheckBox.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             else
@@ -54,13 +73,14 @@ class TaskAdapter(context: Context, taskList: ArrayList<String>, val supportActi
         init {
             taskCheckBox.setOnClickListener {
                 taskList[layoutPosition].isChecked = !taskList[layoutPosition].isChecked
+                taskInfoDao.update(taskList[layoutPosition])
                 adapter.notifyItemChanged(layoutPosition)
                 updateActionBar()
             }
             deleteButton.setOnClickListener {
-                val position = taskList.indexOfFirst { it.number.toString() == number.text }
-                taskList.removeAt(position)
-                adapter.notifyItemRemoved(position)
+                taskInfoDao.delete(taskList[layoutPosition])
+                updateTaskListFromDB()
+                adapter.notifyItemRemoved(layoutPosition)
                 updateActionBar()
             }
             detailsButton.setOnClickListener {
@@ -73,5 +93,16 @@ class TaskAdapter(context: Context, taskList: ArrayList<String>, val supportActi
     fun updateActionBar() {
         supportActionBar?.title =
             "To do list        Total: ${taskList.size} - Checked: ${taskList.count { it.isChecked }}"
+    }
+
+    fun updateTaskListFromDB() {
+        taskList = taskInfoDao.getAll().toMutableList()
+    }
+
+    fun clearDB() {
+        taskList.forEach {
+            taskInfoDao.delete(it)
+        }
+        updateTaskListFromDB()
     }
 }
